@@ -1,7 +1,10 @@
+#include <iostream>
+#include "view.hpp"
+
+using namespace std;
 
 
-
-void print_square(Piece Plateau[taille][taille], int x, int y){
+void print_square(Plateau Plateau, int x, int y){
     if(Plateau[x][y].couleur){
         if (Plateau[x][y].type == pion){
             cout << "p";
@@ -47,7 +50,7 @@ void print_square(Piece Plateau[taille][taille], int x, int y){
     }
 }
 
-void print_board(Piece plateau[taille][taille]){
+void print_board(Plateau plateau){
     cout << "  a b c d e f g h  " << endl;
     for(int i = taille-1; i > -1; i--){
         cout << i+1 << " ";
