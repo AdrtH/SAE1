@@ -17,3 +17,6 @@ void set_squareChaine(Liste*, int, int, Piece);
 Liste* startChaine();
 void move_pieceChaine(Liste **, int, int, int, int);
 void printChaine(Liste*);
+
+
+#endif //BOARD_HPP

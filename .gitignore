@@ -7,6 +7,15 @@
 *.o
 *.obj
 
+# Emacs garbage files
+.#*
+*.*~
+
+# PDF and other non-cody files
+*.ods
+*.xlsx
+*.pdf
+
 # Precompiled Headers
 *.gch
 *.pch
