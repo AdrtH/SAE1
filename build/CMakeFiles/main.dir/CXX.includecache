@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/adrien/Documents/Info7/projet/board.hpp
+
+/home/adrien/Documents/Info7/projet/main.cpp
+iostream
+-
+types.hpp
+/home/adrien/Documents/Info7/projet/types.hpp
+board.hpp
+/home/adrien/Documents/Info7/projet/board.hpp
+view.hpp
+/home/adrien/Documents/Info7/projet/view.hpp
+
+/home/adrien/Documents/Info7/projet/types.hpp
+string
+-
+
+/home/adrien/Documents/Info7/projet/view.hpp
+
