@@ -1,3 +1,7 @@
+#ifndef TYPE_HPP
+
+#define TYPE_HPP
+
 enum typePiece{
 	       pion,
 	       fou,
@@ -37,3 +41,6 @@ struct gameTab{
   Piece capturees[32];
   Pile  historique;
 };
+
+
+#endif // TYPE_HPP
