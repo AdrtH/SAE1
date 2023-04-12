@@ -2,14 +2,12 @@
 
 #define TYPES_HPP
 
+#include <string>
+
 const int  taille        = 8;
 const bool blanc	 = false;
 const bool noir	         = true;
 const int  MAXHISTORIQUE = 100;
-
-
-using Plateau = Piece[taille][taille];
-
 
 enum typePiece{
 	       pion,
@@ -26,6 +24,8 @@ struct Piece{
   bool		couleur;
 };
 
+typedef Piece Plateau[taille][taille];
+
 struct Liste{
   int    x,y;
   Piece  piece;
@@ -33,8 +33,8 @@ struct Liste{
 };
 
 struct Pile{
-  string coup[MAXHISTORIQUE];
-  int    sommet;
+  std::string coup[MAXHISTORIQUE];
+  int         sommet;
 };
 
 struct gameChaine{

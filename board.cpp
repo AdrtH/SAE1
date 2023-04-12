@@ -1,5 +1,5 @@
+#include "types.hpp"
 #include <iostream>
-#include "type.hpp"
 
 using namespace std;
 
@@ -144,7 +144,7 @@ Liste* startChaine()
   return ret;
 }
 
-void startTab(Piece plateau)
+void startTab(Plateau plateau)
 {
   for(int i = 0; i<taille; ++i){
     for(int j = 0; j<taille; ++j){
@@ -196,7 +196,7 @@ void move_pieceChaine(Liste **tete, int xDepart, int yDepart, int xArrive, int y
   }
 }
 
-void move_pieceTab(Piece plateau, int xDepart, int yDepart, int xArrive, int yArrive)
+void move_pieceTab(Plateau plateau, int xDepart, int yDepart, int xArrive, int yArrive)
 {
   Piece piece = plateau[yDepart][xDepart];
   plateau[yDepart][xDepart] = Piece{rien, 0};
@@ -220,7 +220,7 @@ void printChaine(Liste* tete)
 }
 
 
-void printTab(Piece plateau)
+void printTab(Plateau plateau)
 {
   for(int i = taille-1; i>=0; --i){
     for(int j = 0; j<taille; ++j){
