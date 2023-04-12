@@ -1,0 +1,7 @@
+#ifndef BOARD_HPP
+
+#define BOARD_HPP
+
+const int  taille = 8;
+
+void emptyTableau(Piece plateau[taille][taille])
