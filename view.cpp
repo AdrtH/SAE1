@@ -1,4 +1,5 @@
 #include <iostream>
+#include "type.hpp"
 #include "view.hpp"
 
 using namespace std;
