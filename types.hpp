@@ -32,8 +32,13 @@ struct Liste{
   Liste* suiv;
 };
 
+struct Coup{
+  int xDepart, yDepart;
+  int xArrive, yArrive;
+};
+
 struct Pile{
-  std::string coup[MAXHISTORIQUE];
+  Coup        coup[MAXHISTORIQUE];
   int         sommet;
 };
 
@@ -45,11 +50,23 @@ struct gameChaine{
 };
 
 struct gameTab{
-  Plateau
- plateau;
-  int   tour;
-  Piece capturees[32];
-  Pile  historique;
+  Plateau      plateau;
+  int          tour;
+  Piece        capturees[32];
+  Pile         historique;
+  std::string  enPassant;
+  int          nbCoups; // à incrementer apres jeu de noirs
+  int          nbDemiCoups; // incrementer à chaque jeu et reset quand capture
+};
+
+typedef unsigned char typeMasque;
+
+const typeMasque ACCESSIBLE =   0b1;
+const typeMasque ACTUELLE   =  0b10;
+const typeMasque ATTAQUEE   = 0b100;
+
+struct Masque{
+  typeMasque masque[taille][taille];
 };
 
 
