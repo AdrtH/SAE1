@@ -1,5 +1,4 @@
 
-
 project(echecs)
 
 set(SRC board.cpp main.cpp view.cpp)

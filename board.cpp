@@ -191,7 +191,7 @@ void move_pieceChaine(Liste **tete, int xDepart, int yDepart, int xArrive, int y
       ptr->x = xArrive;
       ptr->y = yArrive;
     }
-    //prec = ptr;
+    Prec = ptr;
     ptr = ptr->suiv;
   }
 }
@@ -219,6 +219,14 @@ void printChaine(Liste* tete)
   }
 }
 
+bool decapitalize(char* c)
+{
+  if((int)*c<91){
+    *c = *c+32;
+    return true;
+  }
+  else return false;
+}
 
 void printTab(Plateau plateau)
 {
