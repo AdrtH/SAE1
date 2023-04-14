@@ -229,3 +229,4 @@ void printTab(Piece plateau)
     cout << endl;
   }
 }
+
