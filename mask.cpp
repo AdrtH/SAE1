@@ -126,3 +126,9 @@ void highlight_possible_moves_bishop(Plateau p, int x, int y, Masque *m){
     }
   }
 }
+
+void highlight_possible_moves_queen(Plateau p, int x, int y, Masque *m){
+  highlight_possible_moves_rook(p, x, y, m);
+  highlight_possible_moves_bishop(p, x, y, m);
+}
+
