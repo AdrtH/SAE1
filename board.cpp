@@ -31,7 +31,7 @@ Piece get_squareChaine(Liste* tete, int x, int y)
 
 Piece get_squareTab(Plateau plateau, int x, int y)
 {
-  return plateau[x][y];
+  return plateau[y][x];
 }
 
 void set_squareChaine(Liste* tete, int x, int y, Piece piece)
