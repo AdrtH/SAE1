@@ -41,6 +41,6 @@ int main(void)
   
   
   /* printChaine(jeuChaine.plateau);
-  printTab(jeuTab.plateau); */
+  printTab(jeuTab.plateau); *\
   return 0;
 };

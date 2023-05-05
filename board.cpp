@@ -228,3 +228,4 @@ void printTab(Plateau plateau)
     cout << endl;
   }
 }
+
