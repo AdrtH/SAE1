@@ -38,8 +38,8 @@ struct Coup{
 };
 
 struct Pile{
-  Coup        coup[MAXHISTORIQUE];
-  int         sommet;
+  Coup coup[MAXHISTORIQUE];
+  int  sommet;
 };
 
 struct gameChaine{
@@ -59,14 +59,20 @@ struct gameTab{
   int          nbDemiCoups; // incrementer à chaque jeu et reset quand capture
 };
 
-typedef unsigned char typeMasque;
 
-const typeMasque ACCESSIBLE =   0b1;
-const typeMasque ACTUELLE   =  0b10;
-const typeMasque ATTAQUEE   = 0b100;
+enum couleurMasque{
+  noCol   = 0,
+  rouge   = 9,
+  vert    = 10,
+  orange  = 202,
+  bleu    = 12,
+  violet  = 89,
+  cyan    = 14,
+  gris    = 8
+};
 
 struct Masque{
-  typeMasque masque[taille][taille];
+  couleurMasque masque[taille][taille];
 };
 
 
