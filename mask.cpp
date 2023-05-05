@@ -69,4 +69,60 @@ void highlight_possible_moves(Plateau p, int x, int y, masque *m)
   get_squareTab(p, x, y);
 }
 
+void highlight_possible_moves_bishop(Plateau p, int x, int y, Masque *m){
+  set_mask(m, x, y, rouge);
+  Piece piece = get_squareTab(p, x, y);
+  Piece PieceActu;
 
+  for(int i = 0; i < taille; i++){
+    PieceActu = get_squareTab(p, x+i, y+i);
+    if (PieceActu.typePiece != rien){
+      if (PieceActu.couleur != piece.couleur){
+        set_mask(m, x+i, y+i, bleu);
+      }
+      break;
+    }
+    else{
+      set_mask(m, x+i, y+i, bleu);
+    }
+  }
+
+    for(int i = 0; i < taille; i++){
+    PieceActu = get_squareTab(p, x+i, y-i);
+    if (PieceActu.typePiece != rien){
+      if (PieceActu.couleur != piece.couleur){
+        set_mask(m, x+i, y-i, bleu);
+      }
+      break;
+    }
+    else{
+      set_mask(m, x+i, y-i, bleu);
+    }
+  }
+
+    for(int i = 0; i < taille; i++){
+    PieceActu = get_squareTab(p, x-i, y+i);
+    if (PieceActu.typePiece != rien){
+      if (PieceActu.couleur != piece.couleur){
+        set_mask(m, x-i, y+i, bleu);
+      }
+      break;
+    }
+    else{
+      set_mask(m, x-i, y+i, bleu);
+    }
+  }
+
+    for(int i = 0; i < taille; i++){
+    PieceActu = get_squareTab(p, x-i, y-i);
+    if (PieceActu.typePiece != rien){
+      if (PieceActu.couleur != piece.couleur){
+        set_mask(m, x-i, y-i, bleu);
+      }
+      break;
+    }
+    else{
+      set_mask(m, x-i, y-i, bleu);
+    }
+  }
+}
