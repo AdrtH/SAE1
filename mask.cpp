@@ -80,13 +80,13 @@ void highlight_possible_moves(Plateau p, int x, int y, Masque *m)
   case tour:
     highlight_possible_moves_rook(p,x,y,m);
     break;
-    /* case fou:
-    higlight_possible_moves_bishop();
+    case fou:
+      highlight_possible_moves_bishop(p,x,y,m);
     break;
   case cavalier:
-    highlight_possible_moves_knight();
+    highlight_possible_moves_knight(p,x,y,m);
     break;
-  case pion:
+    /* case pion:
     highlight_possible_moves_pawn();
     break; */
   default:
@@ -146,61 +146,102 @@ void highlight_possible_moves_rook(Plateau p, int x, int y, Masque *m)
     set_mask(m, x,i, bleu);      
   }
 }
+
+
 void highlight_possible_moves_bishop(Plateau p, int x, int y, Masque *m){
   set_mask(m, x, y, rouge);
   Piece piece = get_squareTab(p, x, y);
   Piece PieceActu;
 
-  for(int i = 0; i < taille; i++){
+  for(int i = 1; x+i < taille && y+i < taille; i++){
     PieceActu = get_squareTab(p, x+i, y+i);
-    if (PieceActu.typePiece != rien){
-      if (PieceActu.couleur != piece.couleur){
-        set_mask(m, x+i, y+i, bleu);
-      }
+    if (PieceActu.type != rien){
+      if (PieceActu.couleur != piece.couleur) set_mask(m, x+i, y+i, bleu);
       break;
     }
-    else{
-      set_mask(m, x+i, y+i, bleu);
-    }
+    set_mask(m, x+i, y+i, bleu);
   }
 
-    for(int i = 0; i < taille; i++){
+  for(int i = 1; x+i <taille && y-i >-1; i++){
     PieceActu = get_squareTab(p, x+i, y-i);
-    if (PieceActu.typePiece != rien){
-      if (PieceActu.couleur != piece.couleur){
-        set_mask(m, x+i, y-i, bleu);
-      }
+    if (PieceActu.type != rien){
+      if (PieceActu.couleur != piece.couleur) set_mask(m, x+i, y-i, bleu);
       break;
     }
-    else{
-      set_mask(m, x+i, y-i, bleu);
-    }
+    set_mask(m, x+i, y-i, bleu);
   }
-
-    for(int i = 0; i < taille; i++){
+  
+  for(int i = 1; y+i < taille && x-i > -1; i++){
     PieceActu = get_squareTab(p, x-i, y+i);
-    if (PieceActu.typePiece != rien){
-      if (PieceActu.couleur != piece.couleur){
-        set_mask(m, x-i, y+i, bleu);
-      }
+    if (PieceActu.type != rien){
+      if (PieceActu.couleur != piece.couleur) set_mask(m, x-i, y+i, bleu);
       break;
     }
-    else{
-      set_mask(m, x-i, y+i, bleu);
+    set_mask(m, x-i, y+i, bleu);
+  }
+  
+  for(int i = 1; y-i>-1 && x-i>-1; i++){
+    PieceActu = get_squareTab(p, x-i, y-i);
+    if (PieceActu.type != rien){
+      if (PieceActu.couleur != piece.couleur) set_mask(m, x-i, y-i, bleu);
+      break;
     }
+    set_mask(m, x-i, y-i, bleu);
+  }
+}
+
+void highlight_possible_moves_knight(Plateau p, int x, int y, Masque* m)
+{
+  set_mask(m, x, y, rouge);
+  Piece piece = get_squareTab(p, x, y);
+  Piece piece_actu;
+
+  piece_actu = get_squareTab(p, x+2, y+1);
+  if(piece_actu.type == rien) set_mask(m, x+2, y+1, bleu);
+  else {
+    if (piece_actu.couleur != piece.couleur) set_mask(m, x+2, y+1, bleu);
   }
 
-    for(int i = 0; i < taille; i++){
-    PieceActu = get_squareTab(p, x-i, y-i);
-    if (PieceActu.typePiece != rien){
-      if (PieceActu.couleur != piece.couleur){
-        set_mask(m, x-i, y-i, bleu);
-      }
-      break;
-    }
-    else{
-      set_mask(m, x-i, y-i, bleu);
-    }
+  piece_actu = get_squareTab(p, x+1, y+2);
+  if(piece_actu.type == rien) set_mask(m, x+1, y+2, bleu);
+  else {
+    if (piece_actu.couleur != piece.couleur) set_mask(m, x+1, y+2, bleu);
+  }
+
+  piece_actu = get_squareTab(p, x-2, y-1);
+  if(piece_actu.type == rien) set_mask(m, x-2, y-1, bleu);
+  else {
+    if (piece_actu.couleur != piece.couleur) set_mask(m, x-2, y-1, bleu);
+  }
+
+  piece_actu = get_squareTab(p, x-1, y-2);
+  if(piece_actu.type == rien) set_mask(m, x-1, y-2, bleu);
+  else {
+    if (piece_actu.couleur != piece.couleur) set_mask(m, x-1, y-2, bleu);
+  }
+  
+  piece_actu = get_squareTab(p, x-2, y+1);
+  if(piece_actu.type == rien) set_mask(m, x-2, y+1, bleu);
+  else {
+    if (piece_actu.couleur != piece.couleur) set_mask(m, x-2, y+1, bleu);
+  }
+
+  piece_actu = get_squareTab(p, x-1, y+2);
+  if(piece_actu.type == rien) set_mask(m, x-1, y+2, bleu);
+  else {
+    if (piece_actu.couleur != piece.couleur) set_mask(m, x-1, y+2, bleu);
+  }
+
+  piece_actu = get_squareTab(p, x+2, y-1);
+  if(piece_actu.type == rien) set_mask(m, x+2, y-1, bleu);
+  else {
+    if (piece_actu.couleur != piece.couleur) set_mask(m, x+2, y-1, bleu);
+  }
+
+  piece_actu = get_squareTab(p, x+1, y-2);
+  if(piece_actu.type == rien) set_mask(m, x+1, y-2, bleu);
+  else {
+    if (piece_actu.couleur != piece.couleur) set_mask(m, x+1, y-2, bleu);
   }
 }
 

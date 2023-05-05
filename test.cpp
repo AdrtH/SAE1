@@ -42,6 +42,27 @@ int main(void)
   highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
   print_board(jeuTab.plateau, masque);
 
+  emptyTableau(jeuTab.plateau);
+  set_squareTab(jeuTab.plateau, 4, 4, Piece{fou, blanc});
+  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  print_board(jeuTab.plateau, masque);
+
+  set_squareTab(jeuTab.plateau, 6, 6, Piece{pion, noir});
+  set_squareTab(jeuTab.plateau, 2, 2, Piece{pion, blanc});
+  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  print_board(jeuTab.plateau, masque);
+
+
+  
+  emptyTableau(jeuTab.plateau);
+  set_squareTab(jeuTab.plateau, 4, 4, Piece{cavalier, blanc});
+  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  print_board(jeuTab.plateau, masque);
+
+  set_squareTab(jeuTab.plateau, 5, 6, Piece{pion, noir});
+  set_squareTab(jeuTab.plateau, 2, 3, Piece{pion, blanc});
+  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  print_board(jeuTab.plateau, masque);
   
   
   /* printChaine(jeuChaine.plateau);
