@@ -18,9 +18,9 @@ void set_foreground(int color)
 
 void print_square_color(Plateau Plateau, int x, int y, int colorBG1, int colorBG2)
 {
-  if(Plateau[x][y].type != rien)
-  if(Plateau[x][y].couleur) set_foreground(0);
-  else set_foreground(7);
+  if(Plateau[y][x].type != rien)
+  if(Plateau[y][x].couleur) set_foreground(0);
+  else set_foreground(15);
   if ((x+y)%2) set_background(colorBG1);
   else set_background(colorBG2);
   print_square(Plateau, x, y);
@@ -28,36 +28,38 @@ void print_square_color(Plateau Plateau, int x, int y, int colorBG1, int colorBG
   cout << "\x1b[0m";
 }
 
-void print_square(Plateau Plateau, int x, int y){
-  if (Plateau[x][y].type == pion){
-    cout << "♟︎";
+void print_square(Plateau Plateau, int x, int y)
+{
+  if (Plateau[y][x].type == pion){
+    cout << "♟";
   }
-  if (Plateau[x][y].type == fou){
+  if (Plateau[y][x].type == fou){
     cout << "♝";
   }
-  if (Plateau[x][y].type == cavalier){
+  if (Plateau[y][x].type == cavalier){
     cout << "♞";
   }
-  if (Plateau[x][y].type == tour){
+  if (Plateau[y][x].type == tour){
     cout << "♜";
   }
-  if (Plateau[x][y].type == reine){
+  if (Plateau[y][x].type == reine){
     cout << "♛";
   }
-  if (Plateau[x][y].type == roi){
+  if (Plateau[y][x].type == roi){
     cout << "♚";
   }
-  if (Plateau[x][y].type == rien){
+  if (Plateau[y][x].type == rien){
     cout << ' ';
   }
 }
 
-void print_board(Plateau plateau){
+void print_board(Plateau plateau)
+{
     cout << "  a b c d e f g h  " << endl;
     for(int i = taille-1; i > -1; i--){
         cout << i+1 << " ";
         for (int j = 0; j<taille;j++){
-	  print_square_color(plateau, i, j, 215, 94);
+	  print_square_color(plateau, j, i, 215, 94);
         }
         cout << i+1 << endl;
     }
