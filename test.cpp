@@ -35,9 +35,13 @@ int main(void)
   emptyTableau(jeuTab.plateau);
   set_squareTab(jeuTab.plateau, 4, 4, Piece{tour, blanc});
   highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
-
   print_board(jeuTab.plateau, masque);
-  
+
+  set_squareTab(jeuTab.plateau, 6, 4, Piece{pion, noir});
+  set_squareTab(jeuTab.plateau, 4, 1, Piece{pion, blanc});
+  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  print_board(jeuTab.plateau, masque);
+
   
   
   /* printChaine(jeuChaine.plateau);
