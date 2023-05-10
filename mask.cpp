@@ -118,3 +118,40 @@ void highlight_possible_moves_pawn(Plateau p, int x, int y, Masque *m){
   }
 
 }
+
+void mask_choices_menu(Plateau p, bool couleur, Masque *m){
+  cout << "Menu : " << endl;
+  cout << "1 : Afficher les pièces déplaçables" << endl;
+  cout << "2 : Afficher les pièces attaquables" << endl;
+  cout << "3 : Afficher les pièces dangereuses à une pièce" << endl;
+  int choix;
+  cin >> choix;
+  if (choix == 1){
+    highlight_movable_pieces(p, couleur, m);
+  }
+  if (choix == 2){
+    highlight_attacked_pieces(p, couleur, m);
+  }
+  if (choix == 3){
+    cout << "Entrez les coordonnées de la pièce :" << endl;
+    int x, y;
+    cin << x << y;
+    highlight_take_pieces(p, x, y m);
+  }
+  else {
+    cout << "Le chiffre est invalide." << endl;
+    mask_choices_menu(p, couleur, m);
+  }
+
+}
+
+void mask_choices(Plateau p, bool couleur, Masque *m){
+  char a;
+  cout << "Voulez vous afficher des informations sur le jeu ? (O/N)";
+  cin >> a;
+  while(a == 'O'){
+    mask_choices(p, couleur, m);
+    cout << "Voulez vous afficher une autre information ? (O/N)";
+    cin >> a;
+  }
+}
