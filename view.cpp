@@ -8,12 +8,12 @@ using namespace std;
 
 void set_background(int color)
 {
-  cout << "\x1b[48;5;"+to_string(color)+"m";
+  cout << "\x1b[48;5;" << color << "m";
 }
 
 void set_foreground(int color)
 {
-  cout << "\x1b[38;5;"+to_string(color)+"m";
+  cout << "\x1b[38;5;" << (color) <<"m";
 }
 
 void print_square_color(Plateau Plateau, int x, int y, int colorBG1, int colorBG2)

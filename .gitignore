@@ -10,6 +10,7 @@
 # Emacs garbage files
 .#*
 *.*~
+#*
 
 # PDF and other non-cody files
 *.ods
@@ -39,3 +40,7 @@
 *.exe
 *.out
 *.app
+
+#Cmake garbage
+./build/*
+

@@ -14,7 +14,13 @@ void highlight_possible_moves(Plateau, int, int, Masque*);
 void highlight_possible_moves_king(Plateau, int, int, Masque*);
 void highlight_possible_moves_rook(Plateau, int, int, Masque*);
 void highlight_possible_moves_bishop(Plateau, int, int, Masque*);
+void highlight_possible_moves_knight(Plateau, int, int, Masque*);
+void highlight_possible_moves_queen(Plateau, int, int, Masque*);
 
+void highlight_movable_pieces(Plateau, bool, Masque*);
+void highlight_attacked_pieces(Plateau, bool, Masque*);
+void highlight_take_pieces(Plateau, int, int, Masque*);
+  
 #endif // MASK_HPP
 
 
