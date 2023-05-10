@@ -24,11 +24,23 @@ int main(void)
     set_mask(&masque, 6,i, cyan);
     set_mask(&masque, 7,i, gris);
   }
+
+  print_board(jeuTab.plateau, masque);
   
   move_pieceTab(jeuTab.plateau, 4, 1, 4, 3); // simuler pion e4
+  highlight_possible_moves(jeuTab.plateau, 4,0, &masque);
+  print_board(jeuTab.plateau, masque);
+
+
+  emptyTableau(jeuTab.plateau);
+  set_squareTab(jeuTab.plateau, 4, 4, Piece{tour, blanc});
+  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+
+  print_board(jeuTab.plateau, masque);
+  
+  
   
   /* printChaine(jeuChaine.plateau);
-  printTab(jeuTab.plateau); */
-  print_board(jeuTab.plateau, masque);
+  printTab(jeuTab.plateau); *\
   return 0;
 };

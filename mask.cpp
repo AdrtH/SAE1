@@ -1,5 +1,6 @@
 #include <iostream>
 #include "types.hpp"
+#include "board.hpp"
 #include "view.hpp"
 #include "mask.hpp"
 #include "board.hpp"
@@ -34,7 +35,7 @@ couleurMasque get_mask(Masque m, int x, int y)
 
 void set_mask(Masque *m, int x, int y, couleurMasque val)
 {
-  m->masque[y][x] = val;
+  if(x>-1 && x<taille && y>-1 && y<taille)m->masque[y][x] = val;
 }
 
 void print_board(Plateau plateau, Masque masque)
@@ -65,7 +66,88 @@ void print_square_color(Plateau Plateau, int x, int y,
   cout << "\x1b[0m";
 }
 
-void highlight_possible_moves_pawn(Plateau p, int x, int y, Masque *m){
+void highlight_possible_moves(Plateau p, int x, int y, Masque *m)
+{
+  clear_mask(m);
+  Piece piece = get_squareTab(p, x, y);
+  cout << piece.type << endl;
+  switch (piece.type) {
+  case roi:
+    highlight_possible_moves_king(p,x,y,m);
+    break;
+    /* case reine:
+    higlight_possible_moves_queen();
+    break; */
+  case tour:
+    highlight_possible_moves_rook(p,x,y,m);
+    break;
+    /* case fou:
+    higlight_possible_moves_bishop();
+    break;
+  case cavalier:
+    highlight_possible_moves_knight();
+    break;
+  case pion:
+    highlight_possible_moves_pawn();
+    break; */
+  default:
+    break;
+  }
+  return;
+}
+
+void highlight_possible_moves_king(Plateau p, int x, int y, Masque *m)
+{
+  Piece piece = get_squareTab(p, x, y);
+  for(int i=y-1; i<y+2; ++i){
+    for(int j=x-1; j<x+2;++j){
+      Piece piece_actu = get_squareTab(p,j,i);
+      if(i==y && j==x) set_mask(m, j,i, rouge);
+      else if(piece_actu.couleur != piece.couleur || piece_actu.type == rien)
+	set_mask(m, j,i, bleu);
+    }
+  }
+}
+
+void highlight_possible_moves_rook(Plateau p, int x, int y, Masque *m)
+{
+  set_mask(m,x,y, rouge);
+  Piece piece = get_squareTab(p,x,y);
+  Piece piece_actu;
+  for(int i=x+1; i<taille; ++i){
+    piece_actu = get_squareTab(p, i, y);
+    if(piece_actu.type != rien){
+      if(piece_actu.couleur != piece.couleur) set_mask(m, i,y, bleu);
+      break;
+    }
+    set_mask(m, i,y, bleu);
+  }
+  for(int i=x-1; i>-1; --i){
+    piece_actu = get_squareTab(p, i, y);
+    if(piece_actu.type != rien){
+      if(piece_actu.couleur != piece.couleur) set_mask(m, i,y, bleu);
+      break;
+    }
+    set_mask(m, i,y, bleu);      
+  }
+  for(int i=y+1; i<taille; ++i){
+    piece_actu = get_squareTab(p, x, i);
+    if(piece_actu.type != rien){
+      if(piece_actu.couleur != piece.couleur) set_mask(m, i,x, bleu);
+      break;
+    }
+    set_mask(m, x,i, bleu);      
+  }
+  for(int i=y-1; i>-1; --i){
+    piece_actu = get_squareTab(p, x, i);
+    if(piece_actu.type != rien){
+      if(piece_actu.couleur != piece.couleur) set_mask(m, x,i, bleu);
+      break;
+    }
+    set_mask(m, x,i, bleu);      
+  }
+}
+void highlight_possible_moves_bishop(Plateau p, int x, int y, Masque *m){
   set_mask(m, x, y, rouge);
   Piece piece = get_squareTab(p, x, y);
   Piece piece_actu;
@@ -155,3 +237,4 @@ void mask_choices(Plateau p, bool couleur, Masque *m){
     cin >> a;
   }
 }
+

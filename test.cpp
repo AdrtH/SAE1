@@ -13,12 +13,38 @@ int main(void)
   print_board(jeuTab.plateau);
 
   Masque masque = empty_mask();
+
+
+  for(int i=0; i<taille; ++i){
+    set_mask(&masque, 1,i, rouge);
+    set_mask(&masque, 2,i, vert);
+    set_mask(&masque, 3,i, orange);
+    set_mask(&masque, 4,i, bleu);
+    set_mask(&masque, 5,i, violet);
+    set_mask(&masque, 6,i, cyan);
+    set_mask(&masque, 7,i, gris);
+  }
+
+  print_board(jeuTab.plateau, masque);
   
   move_pieceTab(jeuTab.plateau, 4, 1, 4, 3); // simuler pion e4
-  highlight_possible_moves_pawn(jeuTab.plateau, 4, 3, &masque);
+  highlight_possible_moves(jeuTab.plateau, 4,0, &masque);
+  print_board(jeuTab.plateau, masque);
+
+
+  emptyTableau(jeuTab.plateau);
+  set_squareTab(jeuTab.plateau, 4, 4, Piece{tour, blanc});
+  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  print_board(jeuTab.plateau, masque);
+
+  set_squareTab(jeuTab.plateau, 6, 4, Piece{pion, noir});
+  set_squareTab(jeuTab.plateau, 4, 1, Piece{pion, blanc});
+  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  print_board(jeuTab.plateau, masque);
+
+  
   
   /* printChaine(jeuChaine.plateau);
   printTab(jeuTab.plateau); */
-  print_board(jeuTab.plateau, masque);
   return 0;
 };
