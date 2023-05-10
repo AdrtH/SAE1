@@ -363,3 +363,4 @@ void mask_choices(Plateau p, bool couleur){
     cin >> a;
   }
 }
+
