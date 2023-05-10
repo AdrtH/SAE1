@@ -3,6 +3,7 @@
 #include "board.hpp"
 #include "view.hpp"
 #include "mask.hpp"
+#include "board.hpp"
 
 using namespace std;
 
@@ -151,16 +152,7 @@ void highlight_possible_moves_rook(Plateau p, int x, int y, Masque *m)
 void highlight_possible_moves_bishop(Plateau p, int x, int y, Masque *m){
   set_mask(m, x, y, rouge);
   Piece piece = get_squareTab(p, x, y);
-  Piece PieceActu;
-
-  for(int i = 1; x+i < taille && y+i < taille; i++){
-    PieceActu = get_squareTab(p, x+i, y+i);
-    if (PieceActu.type != rien){
-      if (PieceActu.couleur != piece.couleur) set_mask(m, x+i, y+i, bleu);
-      break;
-    }
-    set_mask(m, x+i, y+i, bleu);
-  }
+  Piece piece_actu;
   for(int i = 1; x+i <taille && y-i >-1; i++){
     PieceActu = get_squareTab(p, x+i, y-i);
     if (PieceActu.type != rien){
@@ -325,3 +317,46 @@ void highlight_take_pieces(Plateau p, int x, int y, Masque* m)
   }
 }
 
+
+void mask_choices_menu(Plateau p, bool couleur, Masque *m){
+  cout << "Menu : " << endl;
+  cout << "1 : Afficher les pièces déplaçables" << endl;
+  cout << "2 : Afficher les pièces attaquables" << endl;
+  cout << "3 : Afficher les pièces dangereuses à une pièce" << endl;
+  int choix;
+  cin >> choix;
+  if (choix == 1){
+    highlight_movable_pieces(p, couleur, m);
+  }
+  if (choix == 2){
+    highlight_attacked_pieces(p, couleur, m);
+  }
+  if (choix == 3){
+    cout << "Entrez les coordonnées de la pièce :" << endl;
+    int x, y;
+    cin << x << y;
+    highlight_take_pieces(p, x, y m);
+  }
+  else {
+    cout << "Le chiffre est invalide." << endl;
+    mask_choices_menu(p, couleur, m);
+  }
+
+}
+
+void mask_choices(Plateau p, bool couleur, Masque *m){
+  char a;
+  cout << "Voulez vous afficher des informations sur le jeu ? (O/N)";
+  cin >> a;
+  while(a == 'O'){
+    mask_choices(p, couleur, m);
+    cout << "Voulez vous afficher une autre information ? (O/N)";
+    cin >> a;
+  for(int i = 1; x+i < taille && y+i < taille; i++){
+    PieceActu = get_squareTab(p, x+i, y+i);
+    if (PieceActu.type != rien){
+      if (PieceActu.couleur != piece.couleur) set_mask(m, x+i, y+i, bleu);
+      break;
+    }
+    set_mask(m, x+i, y+i, bleu);
+  }
