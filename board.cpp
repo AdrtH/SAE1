@@ -238,7 +238,7 @@ void empiler(PilePiece *p, Piece piece)
 void empiler(Pile *p, Coup c)
 {
   if(p->sommet <= MAXHISTORIQUE) return;
-  p->p[p->sommet++] = c;
+  p->coup[p->sommet++] = c;
 }
 
 Coup move_pieceTab(gameTab* g, int xDepart, int yDepart, int xArrive, int yArrive)
@@ -251,15 +251,15 @@ Coup move_pieceTab(gameTab* g, int xDepart, int yDepart, int xArrive, int yArriv
   // TODO: s'occuper de la prise en passant
   // TODO: s'occuper du roque
   if(p.type != rien || p.couleur != 0){ // si on prend une piece
-    empiler((g->capturees), p);
+    empiler(&(g->capturees), p);
     g->nbDemiCoups = 0; // s'il y a capture on reset les demis coups
     c.etat |= CAPTURE;
   }
   if(piece.type == pion) g->nbDemiCoups = 0; // s'il y a deplacement de pion on reset les demis coups
-  if(g->col) ++(g->nbCoups); // si c'est les noirs qui ont joué, le nombre de coups augmente
+  if(g->col_joue) ++(g->nbCoups); // si c'est les noirs qui ont joué, le nombre de coups augmente
   g->plateau[yArrive][xArrive] = piece;
-  g->col = !(g->col);
-  return Coup; // pour éventuellement l'ajouter à l'historique
+  g->col_joue = !(g->col_joue);
+  return c; // pour éventuellement l'ajouter à l'historique
 }
 
 

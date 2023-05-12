@@ -105,7 +105,7 @@ void highlight_possible_moves(Plateau p, int x, int y, Masque *m)
   for(int i=0; i<taille; ++i){ // situation de clouage et d'auto echecs
     for(int j=0; j<taille; ++j){
       if(get_mask(*m,j,i) == bleu)
-	if(simulate_Coup(p, x,y,j,i)
+	if(simulate_Coup(p, x,y,j,i))
 	   set_mask(m, j,i, noCol);
     }
   }

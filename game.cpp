@@ -5,7 +5,8 @@
 #include "view.hpp"
 #include "mask.hpp"
 #include "board.hpp"
-#include "historique.hpp"
+#include "game.hpp"
+//#include "historique.hpp"
 using namespace std;
 
 int alea(int n1, int n2)
@@ -61,7 +62,7 @@ void one_run_human(gameTab* G){
     mask_choices(G->plateau, G->col_joue);
     coup = choose_mouvement_human(G->plateau, G->col_joue);
     Piece piece = get_squareTab(G->plateau, coup.xDepart, coup.yDepart);
-    move_pieceTab(G->plateau, coup.xDepart, coup.yDepart, coup.xArrive, coup.yArrive);
+    move_pieceTab(G, coup.xDepart, coup.yDepart, coup.xArrive, coup.yArrive);
 }
 
 void one_run(gameTab* G){
@@ -70,7 +71,7 @@ void one_run(gameTab* G){
         print_board(G->plateau);
     }
     else{
-        //one_run_computer(G);
+        one_run_computer(G);
         print_board(G->plateau);
     }
 } 
@@ -80,7 +81,7 @@ Coup choose_mouvement_computer(gameTab *g)
 {
   Coup ret;
   Masque m = empty_mask();
-  highlight_movable_pieces(g->plateau, g->col, &m);
+  highlight_movable_pieces(g->plateau, g->col_joue, &m);
   int count=0;
   for(int i=0; i<taille; ++i){
     for(int j=0; j<taille; ++j){
@@ -99,7 +100,7 @@ Coup choose_mouvement_computer(gameTab *g)
     }
   }
   clear_mask(&m);
-  highlight_possible_moves(g->plateau, j,i, &m);
+  highlight_possible_moves(g->plateau, ret.xDepart, ret.yDepart, &m);
   choix = 0;
   for(int i=0; i<taille; ++i){
     for(int j=0; j<taille; ++j){
@@ -130,5 +131,5 @@ void one_run_computer(gameTab *g)
 {
   Coup coup = choose_mouvement_computer(g);
   coup = move_pieceTab(g, coup.xDepart, coup.yDepart, coup.xArrive, coup.yArrive);
-  
+
 }
