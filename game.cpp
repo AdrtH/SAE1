@@ -23,7 +23,7 @@ bool test_run(Plateau p, Coup coup, bool couleur){
     return true;
 }
 
-Coup choose_mouvement_human(Plateau p, bool couleur){
+Coup choose_mouvement_human(Plateau p){
     Coup c;
     char char1, char2;
     cout << "Coordonnées du point de départ";
@@ -34,10 +34,16 @@ Coup choose_mouvement_human(Plateau p, bool couleur){
     cin >> char2, c.yArrive;
     c.yDepart = int(char2) - 97;
     c.yArrive--;
-    if (test_run(p, c, couleur)){
+    Piece piece = get_squareTab(p, c.xDepart, c.yDepart);
+    if (test_run(p, c, piece.couleur)){
         return c;
     }
     else{
-        choose_mouvement_human(p, couleur);
+        choose_mouvement_human(p);
     }
+}
+
+void one_run_human(Plateau p){
+    Coup coup;
+    choose_mouvement_human(p);
 }
