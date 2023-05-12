@@ -105,9 +105,39 @@ void highlight_possible_moves(Plateau p, int x, int y, Masque *m)
   for(int i=0; i<taille; ++i){ // situation de clouage et d'auto echecs
     for(int j=0; j<taille; ++j){
       if(get_mask(*m,j,i) == bleu)
-	if(simulate_Coup(p, x,y,j,i)
+	if(simulate_Coup(p, x,y,j,i))
 	   set_mask(m, j,i, noCol);
     }
+  }
+  return;
+}
+
+void highlight_possible_moves_safe(Plateau p, int x, int y, Masque *m)
+{
+  Piece piece = get_squareTab(p, x, y);
+  switch (piece.type) {
+  case rien:
+    break;
+  case roi:
+    highlight_possible_moves_king(p,x,y,m);
+    break;
+  case reine:
+    highlight_possible_moves_queen(p,x,y,m);
+    break;
+  case tour:
+    highlight_possible_moves_rook(p,x,y,m);
+    break;
+  case fou:
+      highlight_possible_moves_bishop(p,x,y,m);
+    break;
+  case cavalier:
+    highlight_possible_moves_knight(p,x,y,m);
+    break;
+  case pion:
+    highlight_possible_moves_pawn(p,x,y,m);
+    break;
+  default:
+    break;
   }
   return;
 }
@@ -376,11 +406,36 @@ void highlight_attacked_pieces(Plateau p, bool col, Masque *m)
   }
 }
 
+void highlight_attacked_pieces_safe(Plateau p, bool col, Masque *m)
+{
+  Masque mtemp = empty_mask();
+  Piece piece;
+  for(int i=0; i<taille; ++i){
+    for(int j=0; j<taille; ++j){
+      piece = get_squareTab(p, j,i);
+      if((piece.type    == rien)
+      || (piece.couleur != col)) continue;
+      highlight_possible_moves_safe(p, j, i, &mtemp);
+    }
+  }
+  for(int i=0; i<taille; ++i){
+    for(int j=0; j<taille; ++j){
+      piece = get_squareTab(p, j,i);
+      if(piece.type    != rien
+      && piece.couleur != col){
+	if(get_mask(mtemp, j,i) == bleu)
+	  set_mask(m, j,i, rouge);
+	else set_mask(m, j,i, vert);
+      }
+    }
+  }
+}
 
+  
 void highlight_take_pieces(Plateau p, int x, int y, Masque* m)
 {
   Piece piece_attaque = get_squareTab(p, x,y);
-  Masque mtemp = empty_mask();
+  Masque mtemp        = empty_mask();
   Piece piece;
   for(int i=0; i<taille; ++i){
     for(int j=0; j<taille; ++j){
@@ -446,7 +501,7 @@ void mask_choices(Plateau p, bool couleur){
 bool isCheck(Plateau plat, bool color)
 {
   Masque m = empty_mask();
-  highlight_attacked_pieces(plat, !color, &m);
+  highlight_attacked_pieces_safe(plat, !color, &m);
   Piece p;
   for(int i=0; i<taille; ++i){
     for(int j=0; j<taille; ++j){
@@ -457,7 +512,8 @@ bool isCheck(Plateau plat, bool color)
       }
     }
   }
-  // unreachable
-  cout << "ERROR: Il manque un roi sur l'echiquier" << endl;
-  exit(1);
+  return false;
 }
+
+
+

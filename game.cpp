@@ -6,6 +6,7 @@
 #include "mask.hpp"
 #include "board.hpp"
 #include "historique.hpp"
+#include "game.hpp"
 using namespace std;
 
 int alea(int n1, int n2)
@@ -70,65 +71,53 @@ void one_run(gameTab* G){
         print_board(G->plateau);
     }
     else{
-        //one_run_computer(G);
+        one_run_computer(G);
         print_board(G->plateau);
     }
 } 
-
 
 Coup choose_mouvement_computer(gameTab *g)
 {
   Coup ret;
   Masque m = empty_mask();
-  highlight_movable_pieces(g->plateau, g->col, &m);
+  highlight_movable_pieces(g->plateau, g->col_joue, &m);
   int count=0;
+  int coords[64][2] = {{0}}
   for(int i=0; i<taille; ++i){
     for(int j=0; j<taille; ++j){
-      if(get_mask(m, j,i) == cyan) ++count;
-    }
-  }
-  int choix = alea(0,count);
-  count = 0;
-  for(int i=0; i<taille; ++i){
-    for(int j=0; j<taille; ++j){
-      if(get_mask(m, j,i) == cyan) ++count;
-      if(count == choix){
-	ret.xDepart = j;
-	ret.yDepart = i;
+      if(get_mask(m, j,i) == cyan) {
+	coords[count][0] = j;
+	coords[count][1] = i;
+	++count;
       }
     }
   }
+  int choix = alea(0,count-1);
+  ret.xDepart = coords[choix][0];
+  ret.yDepart = coords[choix][1];
   clear_mask(&m);
-  highlight_possible_moves(g->plateau, j,i, &m);
-  choix = 0;
-  for(int i=0; i<taille; ++i){
-    for(int j=0; j<taille; ++j){
-      if(get_mask(m, j,i) == cyan) ++count;
-    }
-  }
+  highlight_possible_moves(g->plateau, ret.xDepart, ret.yDepart, &m);
   count = 0;
   for(int i=0; i<taille; ++i){
     for(int j=0; j<taille; ++j){
-      if(get_mask(m, j,i) == cyan) ++count;
-    }
-  }
-  choix = alea(0,count);
-  count = 0;
-  for(int i=0; i<taille; ++i){
-    for(int j=0; j<taille; ++j){
-      if(get_mask(m, j,i) == cyan) ++count;
-      if(choix == count){
-	ret.xArrive = j;
-	ret.yArrive = i;
+      if(get_mask(m, j,i) == bleu) {
+	coords[count][0] = j;
+	coords[count][1] = i;
+	++count;
       }
     }
   }
+  choix = alea(0,count-1);
+  count = 0;
+  ret.xArrive = coords[choix][0];
+  ret.yArrive = coords[choix][1];
+  // TODO: prendre en compte prise en passant/roque dans etat de coup
   return ret;
 }
 
 void one_run_computer(gameTab *g)
 {
   Coup coup = choose_mouvement_computer(g);
-  coup = move_pieceTab(g, coup.xDepart, coup.yDepart, coup.xArrive, coup.yArrive);
+  move_pieceTab(g, coup.xDepart, coup.yDepart, coup.xArrive, coup.yArrive);
   
 }

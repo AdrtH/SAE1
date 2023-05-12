@@ -21,7 +21,9 @@ void highlight_movable_pieces(Plateau, bool, Masque*);
 void highlight_attacked_pieces(Plateau, bool, Masque*);
 void highlight_take_pieces(Plateau, int, int, Masque*);
 void mask_choices(Plateau, bool);
-  
+bool isCheck(Plateau, bool);
+
+
 #endif // MASK_HPP
 
 
