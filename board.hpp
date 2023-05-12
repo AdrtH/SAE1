@@ -10,6 +10,8 @@ void set_squareTab(Plateau, int, int, Piece);
 void startTab(Plateau);
 void move_pieceTab(Plateau, int, int, int, int);
 void printTab(Plateau);
+Coup move_pieceTab(gameTab*, int, int, int, int);
+gameTab startGame();
 
 // FONCTIONS SUR CHAINE
 void emptyChaine(Liste*);

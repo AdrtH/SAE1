@@ -117,7 +117,7 @@ Liste* startChaine()
     ptr->x = i;
     ptr->y = 7;
     ptr->piece = Piece{fou, noir};
-  }
+ }
   // initialiser les reines
   ptr->suiv = new Liste;
   ptr = ptr->suiv;
@@ -174,6 +174,32 @@ void startTab(Plateau plateau)
 }
 
 
+void emptyPile(Pile *p)
+{
+  p->sommet = 0;
+}
+
+
+void emptyPile(PilePiece *p)
+{
+  p->sommet = 0;
+}
+
+
+gameTab startGame(typeJoueur j1, typeJoueur j2)
+{
+  gameTab ret;
+  ret.col_joue = blanc;
+  ret.nbCoups = 0;
+  ret.nbDemiCoups = 0;
+  ret.typeJ[0] = j1;
+  ret.typeJ[1] = j2;
+  ret.roqueDispo = GRD_ROQUE_BLANC | GRD_ROQUE_NOIR
+                 | PTT_ROQUE_BLANC | PTT_ROQUE_NOIR;
+  emptyPile(&(ret.capturees));
+  emptyPile(&(ret.historique));
+  return ret;
+}
 
 void move_pieceChaine(Liste **tete, int xDepart, int yDepart, int xArrive, int yArrive)
 {
@@ -201,6 +227,49 @@ void move_pieceTab(Plateau plateau, int xDepart, int yDepart, int xArrive, int y
   Piece piece = plateau[yDepart][xDepart];
   plateau[yDepart][xDepart] = Piece{rien, 0};
   plateau[yArrive][xArrive] = piece;
+}
+
+void empiler(PilePiece *p, Piece piece)
+{
+  if(p->sommet <= MAXCAPTURE) return;
+  p->p[p->sommet++] = piece;
+}
+
+void empiler(Pile *p, Coup c)
+{
+  if(p->sommet <= MAXHISTORIQUE) return;
+  p->p[p->sommet++] = c;
+}
+
+Coup move_pieceTab(gameTab* g, int xDepart, int yDepart, int xArrive, int yArrive)
+{
+  Piece piece = g->plateau[yDepart][xDepart];
+  g->plateau[yDepart][xDepart] = Piece{rien, 0};
+  ++(g->nbDemiCoups);
+  Coup c = {xDepart, yDepart, xArrive, yArrive, 0};
+  Piece p = get_squareTab(g->plateau, xArrive, yArrive);
+  // TODO: s'occuper de la prise en passant
+  // TODO: s'occuper du roque
+  if(p.type != rien || p.couleur != 0){ // si on prend une piece
+    empiler((g->capturees), p);
+    g->nbDemiCoups = 0; // s'il y a capture on reset les demis coups
+    c.etat |= CAPTURE;
+  }
+  if(piece.type == pion) g->nbDemiCoups = 0; // s'il y a deplacement de pion on reset les demis coups
+  if(g->col) ++(g->nbCoups); // si c'est les noirs qui ont joué, le nombre de coups augmente
+  g->plateau[yArrive][xArrive] = piece;
+  g->col = !(g->col);
+  return Coup; // pour éventuellement l'ajouter à l'historique
+}
+
+
+void copy_board(Plateau p, Plateau ret)
+{
+  for(int i=0; i<taille; ++i){
+    for(int j=0; j<taille;++j){
+      ret[i][j] = p[i][j];
+    }
+  }
 }
 
 

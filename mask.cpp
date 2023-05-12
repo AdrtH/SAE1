@@ -66,6 +66,15 @@ void print_square_color(Plateau Plateau, int x, int y,
   cout << "\x1b[0m";
 }
 
+bool simulate_Coup(Plateau p, int xDep, int yDep, int xArr, int yArr)
+{
+  Plateau dup;
+  copy_board(p, dup);
+  move_pieceTab(dup, xDep, yDep, xArr, yArr);
+  bool col = get_squareTab(p, xDep, yDep).couleur;
+  return isCheck(dup, col);
+}
+
 void highlight_possible_moves(Plateau p, int x, int y, Masque *m)
 {
   Piece piece = get_squareTab(p, x, y);
@@ -87,13 +96,74 @@ void highlight_possible_moves(Plateau p, int x, int y, Masque *m)
   case cavalier:
     highlight_possible_moves_knight(p,x,y,m);
     break;
-    /* case pion:
-    highlight_possible_moves_pawn();
-    break; */
+  case pion:
+    highlight_possible_moves_pawn(p,x,y,m);
+    break;
   default:
     break;
   }
+  for(int i=0; i<taille; ++i){ // situation de clouage et d'auto echecs
+    for(int j=0; j<taille; ++j){
+      if(get_mask(*m,j,i) == bleu)
+	if(simulate_Coup(p, x,y,j,i)
+	   set_mask(m, j,i, noCol);
+    }
+  }
   return;
+}
+
+void highlight_possible_moves_pawn(Plateau p, int x, int y, Masque *m){
+  set_mask(m, x, y, rouge);
+  Piece piece = get_squareTab(p, x, y);
+  Piece piece_actu;
+
+  if(piece.couleur){
+
+    piece_actu = get_squareTab(p, x, y-1);
+    if (piece_actu.type == rien){
+      set_mask(m, x, y-1, bleu);
+
+      if(y == 6){
+        piece_actu = get_squareTab(p, x, y-2);
+        if (piece_actu.type == rien){
+          set_mask(m, x, y-2, bleu);
+        }
+      }      
+    }
+
+    piece_actu = get_squareTab(p, x-1, y-1);
+    if((piece_actu.type != rien) && (!piece_actu.couleur)){
+      set_mask(m, x-1, y-1, bleu);
+    }
+    piece_actu = get_squareTab(p, x+1, y-1);
+    if((piece_actu.type != rien) && (!piece_actu.couleur)){
+      set_mask(m, x+1, y-1, bleu);
+    }
+  }
+  else{
+    piece_actu = get_squareTab(p, x, y+1);
+    if (piece_actu.type == rien){
+      set_mask(m, x, y+1, bleu);
+
+      if(y == 1){
+        piece_actu = get_squareTab(p, x, y+2);
+        if (piece_actu.type == rien){
+          set_mask(m, x, y+2, bleu);
+        }
+      }      
+    }
+
+    piece_actu = get_squareTab(p, x-1, y+1);
+    if((piece_actu.type != rien) && (piece_actu.couleur)){
+      set_mask(m, x-1, y+1, bleu);
+    }
+
+    piece_actu = get_squareTab(p, x+1, y+1);
+    if((piece_actu.type != rien)&& (piece_actu.couleur)){
+      set_mask(m, x+1, y+1, bleu);
+    }
+  }
+
 }
 
 void highlight_possible_moves_king(Plateau p, int x, int y, Masque *m)
@@ -153,6 +223,7 @@ void highlight_possible_moves_bishop(Plateau p, int x, int y, Masque *m){
   set_mask(m, x, y, rouge);
   Piece piece = get_squareTab(p, x, y);
   Piece PieceActu;
+  
   for(int i = 1; x+i <taille && y-i >-1; i++){
     PieceActu = get_squareTab(p, x+i, y-i);
     if (PieceActu.type != rien){
@@ -247,8 +318,7 @@ void highlight_possible_moves_queen(Plateau p, int x, int y, Masque *m)
 {
   Piece piece = get_squareTab(p, x,y);
   if(piece.type != reine) {
-    cout << "ARza" << endl;
-    exit(1);
+    return;
   }
   highlight_possible_moves_bishop(p,x,y,m);
   highlight_possible_moves_rook(p,x,y,m);
@@ -279,6 +349,7 @@ void highlight_movable_pieces(Plateau p, bool col, Masque *m)
     }
   }
 }
+
 
 void highlight_attacked_pieces(Plateau p, bool col, Masque *m)
 {
@@ -358,9 +429,9 @@ void mask_choices_menu(Plateau p, bool couleur, Masque *m){
   }
 }
 
-
 void mask_choices(Plateau p, bool couleur){
   Masque m = empty_mask();
+
   char a;
   cout << "Voulez vous afficher des informations sur le jeu ? (O/N)";
   cin >> a;
@@ -368,6 +439,25 @@ void mask_choices(Plateau p, bool couleur){
     mask_choices_menu(p, couleur, &m);
     cout << "Voulez vous afficher une autre information ? (O/N)";
     cin >> a;
+
   }
 }
 
+bool isCheck(Plateau plat, bool color)
+{
+  Masque m = empty_mask();
+  highlight_attacked_pieces(plat, !color, &m);
+  Piece p;
+  for(int i=0; i<taille; ++i){
+    for(int j=0; j<taille; ++j){
+      p = get_squareTab(plat, j,i);
+      if(p.type == roi && p.couleur == color){
+	if(get_mask(m, j,i) == rouge) return true;
+	else return false;
+      }
+    }
+  }
+  // unreachable
+  cout << "ERROR: Il manque un roi sur l'echiquier" << endl;
+  exit(1);
+}

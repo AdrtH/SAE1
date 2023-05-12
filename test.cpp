@@ -73,11 +73,9 @@ int main(void)
   move_pieceTab(jeuTab.plateau, 3,0, 5,2); // simuler dame g4
   clear_mask(&masque);
   highlight_possible_moves(jeuTab.plateau, 5,2, &masque);
-  // cout << "mouvement dame" << endl;
   print_board(jeuTab.plateau, masque);
   
   clear_mask(&masque);
-  // print_board(jeuTab.plateau, masque);
   highlight_attacked_pieces(jeuTab.plateau, blanc, &masque);
   print_board(jeuTab.plateau, masque);
 
@@ -85,7 +83,6 @@ int main(void)
   clear_mask(&masque);
   highlight_take_pieces(jeuTab.plateau, 5,6, &masque);
   print_board(jeuTab.plateau, masque);
-  /* printChaine(jeuChaine.plateau);
-  printTab(jeuTab.plateau); */
+  
   return 0;
 };
