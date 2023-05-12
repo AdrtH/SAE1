@@ -290,7 +290,6 @@ void highlight_attacked_pieces(Plateau p, bool col, Masque *m)
       if((piece.type    == rien)
       || (piece.couleur != col)) continue;
       highlight_possible_moves(p, j, i, &mtemp);
-      print_board(p, mtemp);
     }
   }
   for(int i=0; i<taille; ++i){
@@ -333,21 +332,29 @@ void mask_choices_menu(Plateau p, bool couleur, Masque *m){
   cout << "3 : Afficher les pièces dangereuses à une pièce" << endl;
   int choix;
   cin >> choix;
-  if (choix == 1){
-    highlight_movable_pieces(p, couleur, m);
-  }
-  if (choix == 2){
-    highlight_attacked_pieces(p, couleur, m);
-  }
-  if (choix == 3){
-    cout << "Entrez les coordonnées de la pièce :" << endl;
-    int x, y;
-    cin >> x >> y;
-    highlight_take_pieces(p, x, y, m);
-  }
-  else {
-    cout << "Le chiffre est invalide." << endl;
-    mask_choices_menu(p, couleur, m);
+  switch (choix){
+    case 1:
+      highlight_movable_pieces(p, couleur, m);
+      print_board(p, *m);
+      clear_mask(m);
+      break;
+    case 2:
+      highlight_attacked_pieces(p, couleur, m);
+      print_board(p, *m);
+      clear_mask(m);
+      break;
+    case 3:
+      cout << "Entrez les coordonnées de la pièce :" << endl;
+      int x, y;
+      cin >> x >> y;
+      highlight_take_pieces(p, x, y, m);
+      print_board(p, *m);
+      clear_mask(m);
+      break;
+    default:
+      cout << "Le chiffre est invalide." << endl;
+      mask_choices_menu(p, couleur, m);
+      break;
   }
 }
 

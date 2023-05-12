@@ -23,27 +23,39 @@ bool test_run(Plateau p, Coup coup, bool couleur){
     return true;
 }
 
-Coup choose_mouvement_human(Plateau p){
+Coup choose_mouvement_human(Plateau p, bool couleur){
     Coup c;
     char char1, char2;
     cout << "Coordonnées du point de départ";
-    cin >> char1, c.yDepart;
+    cin >> char1 >> c.yDepart;
     c.xDepart = int(char1) - 97;
     c.yDepart--;
     cout << "Coordonnées du point d'arrivée";
-    cin >> char2, c.yArrive;
-    c.yDepart = int(char2) - 97;
+    cin >> char2 >> c.yArrive;
+    c.xArrive = int(char2) - 97;
     c.yArrive--;
-    Piece piece = get_squareTab(p, c.xDepart, c.yDepart);
-    if (test_run(p, c, piece.couleur)){
-        return c;
+    if (!test_run(p, c, couleur)){
+        return choose_mouvement_human(p, couleur);
     }
-    else{
-        choose_mouvement_human(p);
-    }
+    return c;
 }
 
-void one_run_human(Plateau p){
+void one_run_human(gameTab* G){
     Coup coup;
-    choose_mouvement_human(p);
+    mask_choices(G->plateau, G->col_joue);
+    coup = choose_mouvement_human(G->plateau, G->col_joue);
+    Piece piece = get_squareTab(G->plateau, coup.xDepart, coup.yDepart);
+    move_pieceTab(G->plateau, coup.xDepart, coup.yDepart, coup.xArrive, coup.yArrive);
 }
+
+void one_run(gameTab* G){
+    if (G->typeJ[G->col_joue] == humain){
+        one_run_human(G);
+        print_board(G->plateau);
+    }
+    else{
+        //one_run_computer(G);
+        print_board(G->plateau);
+    }
+} 
+

@@ -49,14 +49,21 @@ struct gameChaine{
   Pile   historique;
 };
 
+enum typeJoueur{
+  ordi,
+  humain,
+};
+
 struct gameTab{
   Plateau      plateau;
+  bool         col_joue;
   int          tour;
   Piece        capturees[32];
   Pile         historique;
   std::string  enPassant;
   int          nbCoups; // à incrementer apres jeu de noirs
   int          nbDemiCoups; // incrementer à chaque jeu et reset quand capture
+  typeJoueur   typeJ[2];
 };
 
 
