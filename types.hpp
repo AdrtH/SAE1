@@ -70,6 +70,11 @@ struct gameChaine{
   Pile   historique;
 };
 
+enum typeJoueur{
+  ordi,
+  humain,
+};
+
 struct gameTab{
   Plateau      plateau;
   bool         col_joue;
