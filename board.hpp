@@ -13,6 +13,8 @@ void printTab(Plateau);
 Coup move_pieceTab(gameTab*, int, int, int, int);
 gameTab startGame();
 void copy_board(Plateau, Plateau);
+void empiler(Pile*, Coup);
+Coup depiler(Pile*);
 
 // FONCTIONS SUR CHAINE
 void emptyChaine(Liste*);

@@ -231,14 +231,22 @@ void move_pieceTab(Plateau plateau, int xDepart, int yDepart, int xArrive, int y
 
 void empiler(PilePiece *p, Piece piece)
 {
-  if(p->sommet <= MAXCAPTURE) return;
+  if(p->sommet >= MAXCAPTURE) return;
   p->p[p->sommet++] = piece;
 }
 
 void empiler(Pile *p, Coup c)
 {
-  if(p->sommet <= MAXHISTORIQUE) return;
-  p->coup[p->sommet++] = c;
+  if(p->sommet >= MAXHISTORIQUE) return;
+  p->coup[(p->sommet)++] = c;
+}
+
+Coup depiler(Pile *p){
+  if (p->sommet > 0){
+    (p->sommet)--;
+    return p->coup[p->sommet];
+  }
+  exit(1);
 }
 
 Coup move_pieceTab(gameTab* g, int xDepart, int yDepart, int xArrive, int yArrive)

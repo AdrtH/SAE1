@@ -4,6 +4,7 @@
 #include "view.hpp"
 #include "mask.hpp"
 #include "game.hpp"
+#include "historique.hpp"
 
 using namespace std;
 
@@ -15,15 +16,15 @@ int main(void)
 
     Masque masque = empty_mask();
 
-    jeuTab.col_joue = 0;
+    jeuTab.col_joue = 1;
     jeuTab.typeJ[0] = humain;
-
-    move_pieceTab(jeuTab.plateau, 4, 1, 4, 3); // simuler pion e4
-    print_board(jeuTab.plateau, masque);
-
-    clear_mask(&masque);
+    jeuTab.typeJ[1] = ordi;
 
     one_run(&jeuTab);
+    one_run(&jeuTab);
+    one_run(&jeuTab);
+
+    backtrack_historique(&jeuTab);
 
     print_board(jeuTab.plateau, masque);
 
