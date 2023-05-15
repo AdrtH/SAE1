@@ -3,13 +3,13 @@
 #include "board.hpp"
 #include "view.hpp"
 #include "mask.hpp"
+#include "historique.hpp"
 
 using namespace std;
 
 int main(void)
 {
-  gameTab jeuTab;
-  startTab(jeuTab.plateau);
+  gameTab jeuTab = startGame(humain, humain);
   print_board(jeuTab.plateau);
 
   Masque masque = empty_mask();
@@ -19,32 +19,32 @@ int main(void)
   
   move_pieceTab(jeuTab.plateau, 4, 1, 4, 3); // simuler pion e4
   clear_mask(&masque);
-  highlight_possible_moves(jeuTab.plateau, 4,0, &masque);
+  highlight_possible_moves(&jeuTab, 4,0, &masque);
   print_board(jeuTab.plateau, masque);
 
 
   emptyTableau(jeuTab.plateau);
   set_squareTab(jeuTab.plateau, 4, 4, Piece{tour, blanc});
   clear_mask(&masque);
-  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  highlight_possible_moves(&jeuTab, 4, 4, &masque);
   print_board(jeuTab.plateau, masque);
 
   set_squareTab(jeuTab.plateau, 6, 4, Piece{pion, noir});
   set_squareTab(jeuTab.plateau, 4, 1, Piece{pion, blanc});
   clear_mask(&masque);
-  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  highlight_possible_moves(&jeuTab, 4, 4, &masque);
   print_board(jeuTab.plateau, masque);
 
   emptyTableau(jeuTab.plateau);
   set_squareTab(jeuTab.plateau, 4, 4, Piece{fou, blanc});
   clear_mask(&masque);
-  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  highlight_possible_moves(&jeuTab, 4, 4, &masque);
   print_board(jeuTab.plateau, masque);
 
   set_squareTab(jeuTab.plateau, 6, 6, Piece{pion, noir});
   set_squareTab(jeuTab.plateau, 2, 2, Piece{pion, blanc});
   clear_mask(&masque);
-  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  highlight_possible_moves(&jeuTab, 4, 4, &masque);
   print_board(jeuTab.plateau, masque);
 
 
@@ -52,37 +52,85 @@ int main(void)
   emptyTableau(jeuTab.plateau);
   set_squareTab(jeuTab.plateau, 4, 4, Piece{cavalier, blanc});
   clear_mask(&masque);
-  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  highlight_possible_moves(&jeuTab, 4, 4, &masque);
   print_board(jeuTab.plateau, masque);
 
   set_squareTab(jeuTab.plateau, 5, 6, Piece{pion, noir});
   set_squareTab(jeuTab.plateau, 2, 3, Piece{pion, blanc});
   clear_mask(&masque);
-  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
+  highlight_possible_moves(&jeuTab, 4, 4, &masque);
   print_board(jeuTab.plateau, masque);
 
 
   
   emptyTableau(jeuTab.plateau);
   startTab(jeuTab.plateau);
-  move_pieceTab(jeuTab.plateau, 4, 1, 4, 3); // simuler pion e4
+  move_pieceTab(&jeuTab, 4, 1, 4, 3); // simuler pion e4
   clear_mask(&masque);
-  highlight_movable_pieces(jeuTab.plateau, blanc, &masque);
+  highlight_movable_pieces(&jeuTab, blanc, &masque);
   print_board(jeuTab.plateau, masque);
 
-  move_pieceTab(jeuTab.plateau, 3,0, 5,2); // simuler dame g4
+  move_pieceTab(&jeuTab, 3,0, 5,2); // simuler dame g4
   clear_mask(&masque);
-  highlight_possible_moves(jeuTab.plateau, 5,2, &masque);
+  highlight_possible_moves(&jeuTab, 5,2, &masque);
   print_board(jeuTab.plateau, masque);
   
   clear_mask(&masque);
-  highlight_attacked_pieces(jeuTab.plateau, blanc, &masque);
+  highlight_attacked_pieces(&jeuTab, blanc, &masque);
   print_board(jeuTab.plateau, masque);
 
 
   clear_mask(&masque);
-  highlight_take_pieces(jeuTab.plateau, 5,6, &masque);
+  highlight_take_pieces(&jeuTab, 5,6, &masque);
   print_board(jeuTab.plateau, masque);
+
+
+  emptyTableau(jeuTab.plateau);
+
+  clear_mask(&masque);
+  set_squareTab(jeuTab.plateau, 5, 6, Piece{roi, noir});
+  set_squareTab(jeuTab.plateau, 2, 3, Piece{roi, blanc});
+  set_squareTab(jeuTab.plateau, 5, 5, Piece{pion, noir});
+  set_squareTab(jeuTab.plateau, 0, 0, Piece{pion, blanc});
+  highlight_possible_moves(&jeuTab, 5,5, &masque);
+  print_board(jeuTab.plateau, masque);
+
+  emptyTableau(jeuTab.plateau);
+
+  clear_mask(&masque);
+  set_squareTab(jeuTab.plateau, 5, 6, Piece{roi, noir});
+  set_squareTab(jeuTab.plateau, 1, 4, Piece{roi, blanc});
+  set_squareTab(jeuTab.plateau, 4, 6, Piece{reine, noir});
+  set_squareTab(jeuTab.plateau, 2, 6, Piece{reine, blanc});
+  highlight_possible_moves(&jeuTab, 4,6, &masque);
+  print_board(jeuTab.plateau, masque);
+  clear_mask(&masque);
+  highlight_possible_moves(&jeuTab, 1,4, &masque);
+  print_board(jeuTab.plateau, masque);  
+
+  jeuTab = startGame(humain, humain);
+  emptyTableau(jeuTab.plateau);
+  startTab(jeuTab.plateau);
+  move_pieceTab(&jeuTab, 4, 1, 4, 3); // simuler pion e4
+  print_board(jeuTab.plateau);
+
+  move_pieceTab(&jeuTab, 1,6, 1,4);
+  print_board(jeuTab.plateau);
   
+  move_pieceTab(&jeuTab, 3,0, 5,2); // simuler dame g4
+  print_board(jeuTab.plateau);
+
+  
+  play_historique(jeuTab.historique);
+
+  char fp[] = "./test_partie.chss";
+  save_historique(jeuTab.historique, fp);
+  bool res;
+  Pile h = load_historique(fp, &res);
+  if(!res) return 1;
+
+  play_historique(h);
+   
+
   return 0;
 };

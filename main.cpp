@@ -3,44 +3,115 @@
 #include "board.hpp"
 #include "view.hpp"
 #include "mask.hpp"
+#include "historique.hpp"
+#include "game.hpp"
 
 using namespace std;
 
+void capitalize(char* c)
+{
+  if(*c > 90) *c = (*c)-32;
+}
+
+
+void play()
+{
+  char input;
+  do{
+    cout << "Entrez H si le joueur 1 (blanc) est humain et O si le joueur 1 est un ordinateur : ";
+    cin  >> input;
+    capitalize(&input);
+  }while(input != 'O' && input != 'H');
+  typeJoueur j1 = (input == 'H')? humain: ordi;
+  do{
+    cout << "Entrez H si le joueur 2 (noir) est humain et O si le joueur 2 est un ordinateur : ";
+    cin  >> input;
+    capitalize(&input);
+  }while(input != 'O' && input != 'H');
+  typeJoueur j2 = (input == 'H')? humain: ordi;
+  gameTab jeu = startGame(j1,j2);
+  print_board(jeu.plateau);
+  string input = "";
+  while(!isCheckMate(&jeu, blanc) && !isCheckMate(&jeu, noir)
+	&& !isPat(&jeu, jeu.col_joue)){
+    cout << "Tour du joueur " << (jeu.col_joue? " noir":"blanc") << '.' << endl;
+    cout << "S'il veut abandonner, qu'il entre Q, sinon autre : ";
+    cin  >> input;
+    if(input == "Q") break;
+    one_run(&jeu);
+  }
+  if(input == "Q"){
+    cout << "Le joueur " << (jeu.col_joue? " noir": "blanc") << "a abandonné." << endl;
+  }
+  else if(isCheckMate(&jeu, noir)){
+    cout << "Le joueur blanc a gagné" << endl;
+  } else if(isCheckMate(&jeu, blanc)){
+    cout << "Le joueur noir a gagné" << endl;
+  } else {
+    cout << "Egalité!" << endl;
+  }
+  cout << "Voulez-vous enregistrer cette partie ? (O/N) ";
+  cin  >> input;
+  capitalize(&input);
+  if(input == 'O'){
+    char *str;
+    string input = "";
+    while(input.length() > 63 || input == ""){
+      cout << "Entrez le nom de la sauvegarde (63 char max): ";
+      cin  >> input;
+    }
+    str = new char[input.length()+1];
+    for(int i=0; i<input.length(); ++i){
+      str[i] = input[i];
+    }
+    str[input.length()] = '\0';
+    save_historique(jeu.historique, str);
+  }
+}
+
+void load()
+{
+  char *str;
+  string input = "";
+  while(input.length() > 63 || input == ""){
+    cout << "Entrez le nom de la sauvegarde (63 char max): ";
+    cin  >> input;
+  }
+  str = new char[input.length()+1];
+  for(int i=0; i<input.length(); ++i){
+      str[i] = input[i];
+    }
+  str[input.length()] = '\0';
+  bool res;
+  Pile h = load_historique(str, &res);
+  if(!res) return;
+  play_historique(h);
+}
+
 int main(void)
 {
-  gameTab jeuTab;
-  startTab(jeuTab.plateau);
-  print_board(jeuTab.plateau);
-
-  Masque masque = empty_mask();
-
-
-  for(int i=0; i<taille; ++i){
-    set_mask(&masque, 1,i, rouge);
-    set_mask(&masque, 2,i, vert);
-    set_mask(&masque, 3,i, orange);
-    set_mask(&masque, 4,i, bleu);
-    set_mask(&masque, 5,i, violet);
-    set_mask(&masque, 6,i, cyan);
-    set_mask(&masque, 7,i, gris);
+  char input;
+  while(true){
+    cout << "---------- ECHECS ----------" << endl;
+    cout << "| Que voulez-vous faire ?  |" << endl
+	 << "|                          |" << endl;
+    cout << "| Jouer une partie   (J)   |" << endl;
+    cout << "| Charger une partie (C)   |" << endl;
+    cout << "|                          |" << endl;
+    cout << "| Sortir         (Autre)   |" << endl;
+    cout << "----------------------------" << endl;
+    cin  >> input;
+    capitalize(&input);
+    switch(input){
+    case 'J':
+      play();
+      break;
+    case 'C':
+      load();
+      break;
+    default:
+      return 0;
+    }
   }
-
-  print_board(jeuTab.plateau, masque);
-  
-  move_pieceTab(jeuTab.plateau, 4, 1, 4, 3); // simuler pion e4
-  highlight_possible_moves(jeuTab.plateau, 4,0, &masque);
-  print_board(jeuTab.plateau, masque);
-
-
-  emptyTableau(jeuTab.plateau);
-  set_squareTab(jeuTab.plateau, 4, 4, Piece{tour, blanc});
-  highlight_possible_moves(jeuTab.plateau, 4, 4, &masque);
-
-  print_board(jeuTab.plateau, masque);
-  
-  
-  
-  /* printChaine(jeuChaine.plateau);
-     printTab(jeuTab.plateau); */
   return 0;
 };

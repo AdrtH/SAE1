@@ -4,13 +4,21 @@
 
 #include <string>
 
-typedef FLAG unsigned char;
+typedef unsigned char FLAG;
 
 const int  taille        = 8;
 const bool blanc	 = false;
 const bool noir	         = true;
 const int  MAXHISTORIQUE = 512;
 const int  MAXCAPTURE    = 32; 
+
+const FLAG GRD_ROQUE_BLANC  = 1;    // 0000 0001
+const FLAG GRD_ROQUE_NOIR   = 1<<1; // 0000 0010
+const FLAG PTT_ROQUE_BLANC  = 1<<2; // 0000 0100
+const FLAG PTT_ROQUE_NOIR   = 1<<3; // 0000 1000
+const FLAG PRISE_EN_PASSANT = 1<<4; // 0000 0001
+const FLAG CAPTURE          = 1<<5; // 0000 0010
+
 
 enum typePiece{
 	       pion,
@@ -20,11 +28,6 @@ enum typePiece{
 	       reine,
 	       roi,
 	       rien
-};
-
-enum typeJoueur {
-  ordi,
-  humain
 };
 
 struct Piece{
@@ -40,12 +43,6 @@ struct Liste{
   Liste* suiv;
 };
 
-FLAG GRD_ROQUE_BLANC  = 1;    // 0000 0001
-FLAG GRD_ROQUE_NOIR   = 1<<1; // 0000 0010
-FLAG PTT_ROQUE_BLANC  = 1<<2; // 0000 0100
-FLAG PPR_ROQUE_NOIR   = 1<<3; // 0000 1000
-FLAG PRISE_EN_PASSANT = 1<<4;    // 0000 0001
-FLAG CAPTURE          = 1<<5; // 0000 0010
 
 struct Coup{
   int  xDepart, yDepart;

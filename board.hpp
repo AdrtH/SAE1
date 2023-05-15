@@ -10,8 +10,12 @@ void set_squareTab(Plateau, int, int, Piece);
 void startTab(Plateau);
 void move_pieceTab(Plateau, int, int, int, int);
 void printTab(Plateau);
+void copy_board(Plateau, Plateau);
 Coup move_pieceTab(gameTab*, int, int, int, int);
-gameTab startGame();
+gameTab startGame(typeJoueur, typeJoueur);
+void empiler(Pile*, Coup);
+Coup depiler(Pile*);
+Piece depiler(PilePiece*);
 
 // FONCTIONS SUR CHAINE
 void emptyChaine(Liste*);

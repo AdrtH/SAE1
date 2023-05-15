@@ -1,4 +1,6 @@
 #include "types.hpp"
+#include "historique.hpp"
+#include "mask.hpp"
 #include <iostream>
 
 using namespace std;
@@ -189,6 +191,7 @@ void emptyPile(PilePiece *p)
 gameTab startGame(typeJoueur j1, typeJoueur j2)
 {
   gameTab ret;
+  startTab(ret.plateau);
   ret.col_joue = blanc;
   ret.nbCoups = 0;
   ret.nbDemiCoups = 0;
@@ -231,35 +234,74 @@ void move_pieceTab(Plateau plateau, int xDepart, int yDepart, int xArrive, int y
 
 void empiler(PilePiece *p, Piece piece)
 {
-  if(p->sommet <= MAXCAPTURE) return;
+  if(p->sommet >= MAXCAPTURE) return;
   p->p[p->sommet++] = piece;
 }
 
 void empiler(Pile *p, Coup c)
 {
-  if(p->sommet <= MAXHISTORIQUE) return;
-  p->p[p->sommet++] = c;
+  if(p->sommet >= MAXHISTORIQUE) return;
+  p->coup[(p->sommet)++] = c;
+}
+
+
+Coup depiler(Pile *p)
+{
+  if(p->sommet == 0) {
+    cout << "Erreur, underflow de l'historique" << endl;
+    exit(1);
+  }
+  return p->coup[--(p->sommet)];
+}
+
+Piece depiler(PilePiece *p){
+  if(p->sommet == 0) {
+    cout << "Erreur, underflow des pieces capturees" << endl;
+    exit(1);
+  }
+  return p->p[--(p->sommet)];
 }
 
 Coup move_pieceTab(gameTab* g, int xDepart, int yDepart, int xArrive, int yArrive)
 {
+  Coup c = {xDepart, yDepart, xArrive, yArrive, 0};
+  if(isCheck(g, g->col_joue)){
+    g->roqueDispo &= (~(GRD_ROQUE_BLANC<<(g->col_joue))); // on enleve les roques si le roi a bougé
+    g->roqueDispo &= (~(PTT_ROQUE_BLANC<<(g->col_joue)));
+  }
   Piece piece = g->plateau[yDepart][xDepart];
+  if(piece.type == roi && xDepart-xArrive == 2 ){ // grand roque
+    c.etat |= GRD_ROQUE_BLANC<<(g->col_joue);
+    move_pieceTab(g->plateau, 0,yDepart, xDepart-1, yDepart);
+  }
+  if(piece.type == roi && xDepart-xArrive == -2 ){ // petit roque
+    c.etat |= PTT_ROQUE_BLANC<<(g->col_joue);
+    move_pieceTab(g->plateau, 7,yDepart, xDepart+1, yDepart);    
+  }
   g->plateau[yDepart][xDepart] = Piece{rien, 0};
   ++(g->nbDemiCoups);
-  Coup c = {xDepart, yDepart, xArrive, yArrive, 0};
   Piece p = get_squareTab(g->plateau, xArrive, yArrive);
   // TODO: s'occuper de la prise en passant
   // TODO: s'occuper du roque
   if(p.type != rien || p.couleur != 0){ // si on prend une piece
-    empiler((g->capturees), p);
+    empiler(&(g->capturees), p);
     g->nbDemiCoups = 0; // s'il y a capture on reset les demis coups
     c.etat |= CAPTURE;
   }
+  if(piece.type == roi){
+    g->roqueDispo &= (~(GRD_ROQUE_BLANC<<(g->col_joue))); // on enleve les roques si le roi a bougé
+    g->roqueDispo &= (~(PTT_ROQUE_BLANC<<(g->col_joue)));
+  }
+  if(piece.type == tour){ // on enleve le roque spécifique si une tour est deplacée
+    if(xDepart == 0) g->roqueDispo &= (~(GRD_ROQUE_BLANC<<(g->col_joue)));
+    else if(xDepart == 8) g->roqueDispo &= (~(PTT_ROQUE_BLANC<<(g->col_joue)));
+  }
   if(piece.type == pion) g->nbDemiCoups = 0; // s'il y a deplacement de pion on reset les demis coups
-  if(g->col) ++(g->nbCoups); // si c'est les noirs qui ont joué, le nombre de coups augmente
+  if(g->col_joue) ++(g->nbCoups); // si c'est les noirs qui ont joué, le nombre de coups augmente
   g->plateau[yArrive][xArrive] = piece;
-  g->col = !(g->col);
-  return Coup; // pour éventuellement l'ajouter à l'historique
+  g->col_joue = !(g->col_joue);
+  MAJ_historique(&(g->historique), c);
+  return c; // pour éventuellement l'ajouter à l'historique
 }
 
 
