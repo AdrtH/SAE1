@@ -13,6 +13,48 @@ void MAJ_historique(Pile *p, Coup c)
   empiler(p, c);
 }
 
+void backtrack_historique(gameTab *g){
+  Coup c;
+  int a;
+  cout << "Entrez '0' pour voir le coup précédent " << endl;
+  cin >> a;
+  while ((a == 0) && (g->historique.sommet > 1)){
+    g->col_joue = !(g->col_joue);
+    c = depiler(&(g->historique));
+    move_pieceTab(g->plateau, c.xArrive, c.yArrive, c.xDepart, c.yDepart);
+    if(c.etat & CAPTURE){
+      Piece pieceCap = depiler(&(g->capturees));
+      set_squareTab(g->plateau, c.xArrive, c.yArrive, pieceCap);
+    }
+    if(c.etat & GRD_ROQUE_BLANC){
+      set_squareTab(g->plateau, 0,0, Piece{tour, blanc});
+      set_squareTab(g->plateau, 3,0, Piece{rien,0});
+      g->roqueDispo |= GRD_ROQUE_BLANC;
+    } else if (c.etat & GRD_ROQUE_NOIR){
+      set_squareTab(g->plateau, 0,7, Piece{tour, noir});
+      set_squareTab(g->plateau, 3,7, Piece{rien,0});
+      g->roqueDispo |= GRD_ROQUE_NOIR;      
+    } else if (c.etat & PTT_ROQUE_BLANC){
+      set_squareTab(g->plateau, 7,0, Piece{tour, blanc});
+      set_squareTab(g->plateau, 5,0, Piece{rien,0});
+      g->roqueDispo |= PTT_ROQUE_BLANC;      
+    } else if (c.etat & PTT_ROQUE_NOIR) {
+      set_squareTab(g->plateau, 7,7, Piece{tour, noir});
+      set_squareTab(g->plateau, 5,7, Piece{rien,0});
+      g->roqueDispo |= PTT_ROQUE_NOIR;      
+    }
+    print_board(g->plateau);
+    cout << "Entrez '0' pour voir le coup précédent " << endl;
+    cout << "Entrez '1' pour reprendre d'ici" << endl;
+    cin >> a;
+  }
+  if(a==0){
+    c = depiler(&(g->historique));
+    move_pieceTab(g, c.xArrive, c.yArrive, c.xDepart, c.yDepart);
+    print_board(g->plateau);
+  }
+}
+
 void play_historique(Pile p)
 {
   gameTab g = startGame(humain, humain);

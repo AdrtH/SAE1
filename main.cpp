@@ -24,23 +24,28 @@ void play()
   }while(input != 'O' && input != 'H');
   typeJoueur j1 = (input == 'H')? humain: ordi;
   do{
-    cout << "Entrez H si le joueur 2 (blanc) est humain et O si le joueur 2 est un ordinateur : ";
+    cout << "Entrez H si le joueur 2 (noir) est humain et O si le joueur 2 est un ordinateur : ";
     cin  >> input;
     capitalize(&input);
   }while(input != 'O' && input != 'H');
   typeJoueur j2 = (input == 'H')? humain: ordi;
   gameTab jeu = startGame(j1,j2);
-  while(!isCheckMate(jeu.plateau, blanc) && !isCheckMate(jeu.plateau, noir)
-	&& !isPat(jeu.plateau, jeu.col_joue)){
+  print_board(jeu.plateau);
+  string input = "";
+  while(!isCheckMate(&jeu, blanc) && !isCheckMate(&jeu, noir)
+	&& !isPat(&jeu, jeu.col_joue)){
+    cout << "Tour du joueur " << (jeu.col_joue? " noir":"blanc") << '.' << endl;
+    cout << "S'il veut abandonner, qu'il entre Q, sinon autre : ";
+    cin  >> input;
+    if(input == "Q") break;
     one_run(&jeu);
   }
-  cout << !isCheckMate(jeu.plateau, blanc) << endl;
-  cout << !isCheckMate(jeu.plateau, noir)  << endl;
-  cout << !isPat(jeu.plateau, blanc)       << endl;
-  cout << !isPat(jeu.plateau, noir)        << endl;  
-  if(isCheckMate(jeu.plateau, noir)){
+  if(input == "Q"){
+    cout << "Le joueur " << (jeu.col_joue? " noir": "blanc") << "a abandonné." << endl;
+  }
+  else if(isCheckMate(&jeu, noir)){
     cout << "Le joueur blanc a gagné" << endl;
-  } else if(isCheckMate(jeu.plateau, blanc)){
+  } else if(isCheckMate(&jeu, blanc)){
     cout << "Le joueur noir a gagné" << endl;
   } else {
     cout << "Egalité!" << endl;
