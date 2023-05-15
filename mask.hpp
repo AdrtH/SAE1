@@ -22,7 +22,8 @@ void highlight_attacked_pieces(Plateau, bool, Masque*);
 void highlight_take_pieces(Plateau, int, int, Masque*);
 void mask_choices(Plateau, bool);
 bool isCheck(Plateau, bool);
-
+bool isPat(Plateau, bool);
+bool isCheckMate(Plateau, bool);
 
 #endif // MASK_HPP
 

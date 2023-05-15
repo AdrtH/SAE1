@@ -62,7 +62,7 @@ void one_run_human(gameTab* G){
     mask_choices(G->plateau, G->col_joue);
     coup = choose_mouvement_human(G->plateau, G->col_joue);
     Piece piece = get_squareTab(G->plateau, coup.xDepart, coup.yDepart);
-    move_pieceTab(G->plateau, coup.xDepart, coup.yDepart, coup.xArrive, coup.yArrive);
+    move_pieceTab(G, coup.xDepart, coup.yDepart, coup.xArrive, coup.yArrive);
 }
 
 void one_run(gameTab* G){
@@ -76,13 +76,13 @@ void one_run(gameTab* G){
     }
 } 
 
-Coup choose_mouvement_computer(gameTab *g)
+Coup choose_mouvement_computer(gameTab *g) // avec l'architecture du code, on n'a pas besoin de fonction tel que "choose movement king in check computer" car le masque empeche deja à l'ordinateur de jouer un coup illégal.
 {
   Coup ret;
   Masque m = empty_mask();
   highlight_movable_pieces(g->plateau, g->col_joue, &m);
   int count=0;
-  int coords[64][2] = {{0}}
+  int coords[64][2] = {{0}};
   for(int i=0; i<taille; ++i){
     for(int j=0; j<taille; ++j){
       if(get_mask(m, j,i) == cyan) {

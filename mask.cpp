@@ -112,8 +112,8 @@ void highlight_possible_moves(Plateau p, int x, int y, Masque *m)
   return;
 }
 
-void highlight_possible_moves_safe(Plateau p, int x, int y, Masque *m)
-{
+void highlight_possible_moves_safe(Plateau p, int x, int y, Masque *m) // même fonction qu'au dessus, mais qui est utilisée pour eviter une boucle d'appel (isCheck -> attacked pieces -> possibleMove -> isCheck)
+{								       // tout en utilisant le même comportement que Lichess au niveau des clouages.                                                              
   Piece piece = get_squareTab(p, x, y);
   switch (piece.type) {
   case rien:
@@ -367,6 +367,7 @@ bool isMovable(Masque m)
 
 void highlight_movable_pieces(Plateau p, bool col, Masque *m)
 {
+  // Pour résumer, on regarde chaque piece de color, on regarde son masque de mouvement, s'il est non vide, on la marque comme bougeable.
   Piece piece;
   Masque mtemp = empty_mask();
   for(int i=0; i<taille; ++i){
@@ -375,6 +376,7 @@ void highlight_movable_pieces(Plateau p, bool col, Masque *m)
       piece = get_squareTab(p, j,i);
       if(piece.couleur != col) continue;
       highlight_possible_moves(p, j, i, &mtemp);
+
       if(isMovable(mtemp)) set_mask(m, j, i, cyan);
     }
   }
@@ -383,6 +385,7 @@ void highlight_movable_pieces(Plateau p, bool col, Masque *m)
 
 void highlight_attacked_pieces(Plateau p, bool col, Masque *m)
 {
+  // Pour résumer, on regarde les mouvements des pieces de la couleur opposé, on marque toutes les pieces se trouvant sur une case bleue sont attaquées.
   Masque mtemp = empty_mask();
   Piece piece;
   for(int i=0; i<taille; ++i){
@@ -406,8 +409,8 @@ void highlight_attacked_pieces(Plateau p, bool col, Masque *m)
   }
 }
 
-void highlight_attacked_pieces_safe(Plateau p, bool col, Masque *m)
-{
+void highlight_attacked_pieces_safe(Plateau p, bool col, Masque *m) // même fonction qu'au dessus, mais qui est utilisée pour eviter une boucle d'appel (isCheck -> attacked pieces -> possibleMove -> isCheck)
+{				                                    // tout en utilisant le même comportement que Lichess au niveau des clouages.
   Masque mtemp = empty_mask();
   Piece piece;
   for(int i=0; i<taille; ++i){
@@ -498,7 +501,7 @@ void mask_choices(Plateau p, bool couleur){
   }
 }
 
-bool isCheck(Plateau plat, bool color)
+bool isCheck(Plateau plat, bool color) // techniquement la fonction "king in check", mais elle a été implémentée avant qu'elle soit demandée, d'où le nom différent.
 {
   Masque m = empty_mask();
   highlight_attacked_pieces_safe(plat, !color, &m);
@@ -507,13 +510,37 @@ bool isCheck(Plateau plat, bool color)
     for(int j=0; j<taille; ++j){
       p = get_squareTab(plat, j,i);
       if(p.type == roi && p.couleur == color){
-	if(get_mask(m, j,i) == rouge) return true;
+	if(get_mask(m, j,i) == rouge) return true; // on cherche si le roi de color est attaqué
 	else return false;
       }
     }
   }
+  // unreachable, mais par précaution
   return false;
 }
 
+bool isPat(Plateau plat, bool col)
+{
+  Masque m = empty_mask();
+  Piece p;
+  for(int k=0; k<taille; ++k){
+    for(int l=0; l<taille; ++l){
+      p = get_squareTab(plat, l,k);
+      if(p.type == rien || p.couleur != col) continue;
+      highlight_possible_moves(plat, k,l, &m);
+    }
+  }
+  for(int i=0; i<taille; ++i){
+    for(int j=0; j<taille; ++j){
+      if(get_mask(m, j,i) == bleu) return false;
+    }
+  }
+  return true; // le joueur color n'a pas de mouvement disponible
+}
 
+bool isCheckMate(Plateau plat, bool col)
+{
+  // une situation d'echec et mat et un pat couplé à un echec
+  return isPat(plat, col) && isCheck(plat, col);
+}
 

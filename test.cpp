@@ -120,10 +120,17 @@ int main(void)
   move_pieceTab(&jeuTab, 3,0, 5,2); // simuler dame g4
   print_board(jeuTab.plateau);
 
-  cout << "retour dans le passé" << endl;
   
   play_historique(jeuTab.historique);
-  
-  
+
+  char fp[] = "./test_partie.chss";
+  save_historique(jeuTab.historique, fp);
+  bool res;
+  Pile h = load_historique(fp, &res);
+  if(!res) return 1;
+
+  play_historique(h);
+   
+
   return 0;
 };
